@@ -1,0 +1,4 @@
+1. Jquery validation
+2. Admin can edit 
+3. User only view own info
+4. Eloquent relatoin
