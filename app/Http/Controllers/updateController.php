@@ -10,7 +10,7 @@ class updateController extends Controller
 {
    public function update(Request $request)
    {
-   		$id = Session::get('id');
+   		$id = $request->id;
    		$request->validate([
     		'name' => 'required',
     		'username' => 'required',
@@ -22,7 +22,7 @@ class updateController extends Controller
 			'email' => $request->email,
 		]);
 
-		return redirect('index')->with('success-message', 'Congratulation!! Your data updated!');
+		return redirect('index')->with('success-message', 'Congratulation!! Data updated!');
 
    }
 
@@ -44,9 +44,9 @@ class updateController extends Controller
 				'password' => $newpass,
 			]);
 
-			return redirect('index')->with('success-message', 'Congratulation!! Your password updated!');
+			return redirect('index')->with('success-message', 'Congratulation!! Password updated!');
    		}else{
-   			return redirect('changepass')->with('danger-message', 'Your old password not match!');
+   			return redirect('changepass')->with('danger-message', 'Old password not match!');
    		}	
    }
 

@@ -8,6 +8,7 @@
 				<div style="max-width: 600px; margin: 0 auto;">
 					<form method="POST" action="{{ url('update') }}">
 						<input type="hidden" name="_token" value="{{csrf_token()}}">
+						<input type="hidden" name="id" id="id" class="form-control" value="{{$data->id}}">
 						<div class="form-group">
 							<label for="name">Your Name</label>
 							<input type="text" name="name" id="name" class="form-control" value="{{$data->name}}">
@@ -20,7 +21,7 @@
 							<label for="email">Email Address</label>
 							<input type="text" name="email" id="email" class="form-control" value="{{$data->email}}">
 						</div>
-						@if($data->id == Session::get('id'))
+						@if($data->id == Session::get('id') || Session::get('adminlogin') == true)
 							<button type="submit" name="update" class="btn btn-success">Update</button>
 							<a class="btn btn-info" href="{{ url('changepass') }}">Change Password</a>
 						@endif

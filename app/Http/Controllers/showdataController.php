@@ -11,10 +11,11 @@ use Illuminate\Support\Facades\Session;
 class showdataController extends Controller
 {
     public function index()
-    {
-    	
+    {	
         if (Session::get('login')==true || Session::get('adminlogin')==true) {
-            $data = DB::table('students')->get();
+            $data = Student::where('id', '!=' , Session::get('id'))->get();
+            //$data = DB::table('students')->get();
+            // return $data;
            return view('index', ['data' => $data]);
         }
         else{

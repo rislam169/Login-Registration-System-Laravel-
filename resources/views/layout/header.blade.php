@@ -30,7 +30,7 @@
 					@if(Session::get('adminlogin') == true)	
 						<li class="nav-item btn btn-light btn-sm"><a class="nav-link" href="{{ url('index') }}">Home</a></li>
 						<li class="nav-item btn btn-light btn-sm"><a class="nav-link" href="{{ url('addAdmin') }}">Add Admin</a></li>
-						<li class="nav-item"><a onclick="return confirm('Are you sure to remove your account!')" class="nav-link" href="{{ url('removeAccount') }}">Remove Account</a></li>
+						<li class="nav-item btn btn-light btn-sm"><a onclick="return confirm('Are you sure to remove your account!')" class="nav-link" href="{{ url('removeAccount') }}">Remove Account</a></li>
 						<li class="nav-item btn btn-light btn-sm"><a class="nav-link" href="{{ url('logout') }}">Logout</a></li>
 					@endif
 
