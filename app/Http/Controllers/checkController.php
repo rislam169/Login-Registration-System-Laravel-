@@ -19,4 +19,5 @@ class checkController extends Controller
    		}
   
    }
+
 }

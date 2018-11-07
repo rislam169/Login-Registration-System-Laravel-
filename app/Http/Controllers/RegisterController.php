@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Admin;
 use App\Student;
+use App\StudentInfo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 
@@ -19,13 +20,22 @@ class RegisterController extends Controller
 		]);
 
     	$student = new Student;
-        
+
         $student->name 		= $request->name;
         $student->username  = $request->username;   
         $student->email     = $request->email;   
         $student->password  = $request->password;   
        
         $student->save();
+
+
+
+
+        $student_info = new StudentInfo;
+        $student_info->std_id       = $student->id;
+        $student_info->save();
+
+
         return redirect('login')->with('success-message', 'Congratulation!! You are registered!');
     }
 

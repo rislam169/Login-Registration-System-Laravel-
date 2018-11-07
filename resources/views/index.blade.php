@@ -11,6 +11,7 @@
 						<th>Name</th>
 						<th>Username</th>
 						<th>Email Address</th>
+						<th>Mobile No</th>
 						@if(Session::get('adminlogin') == true)	
 							<th>Action</th>
 						@endif
@@ -21,6 +22,7 @@
 							<td>{{$value->name}}</td>
 							<td>{{$value->username}}</td>
 							<td>{{$value->email}}</td>
+							<td>{{$value->details->mobile}}</td>
 							<!-- <a class="btn btn-primary" href="{{ url('profile/'.$value->id) }}">View</a> -->
 							@if(Session::get('adminlogin') == true)
 								<td>
@@ -33,5 +35,6 @@
 					@endforeach
 				</table>
 			</div>
+			{{ $data->links() }}
 		</div>
 @include('layout.footer')

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Student;
+use App\StudentInfo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 
@@ -20,6 +21,13 @@ class updateController extends Controller
 			'name' => $request->name,
 			'username' => $request->username,
 			'email' => $request->email,
+		]);
+
+		StudentInfo::where('std_id', $id)->update([
+			'father_name' => $request->fname,
+			'mother_name' => $request->mname,
+			'address' => $request->address,
+			'mobile' => $request->mobile,
 		]);
 
 		return redirect('index')->with('success-message', 'Congratulation!! Data updated!');

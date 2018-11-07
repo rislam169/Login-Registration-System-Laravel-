@@ -11,24 +11,25 @@
 						<div class="form-group">
 							<label for="name">Your Name</label>
 							<input type="text" name="name" id="name" class="form-control">
-							<p id="namestatus"></p>
 						</div>
 						<div class="form-group">
 							<label for="username">Username</label>
 							<input type="text" name="username" id="username" class="form-control">
-							<p id="usernamestatus"></p>
 						</div>
 						<div class="form-group">
 							<label for="email">Email Address</label>
-							<input type="text" name="email" id="email" class="form-control">
+							<input type="email" name="email" id="email" class="form-control">
 							<p id="emailstatus"></p>
 						</div>
 						<div class="form-group">
 							<label for="password">Password</label>
 							<input type="password" name="password" id="password" class="form-control">
-							<p id="passwordstatus"></p>
 						</div>
-						<button type="submit" name="register" class="btn btn-success">Submit</button>
+						<div class="form-group">
+							<label for="password">Confirm Password</label>
+							<input type="password" name="confirm_password" id="confirm_password" class="form-control">
+						</div>
+						<button type="submit" name="register" class="btn btn-success" id="register">Submit</button>
 					</form>
 				</div>
 			</div>
@@ -36,148 +37,106 @@
 
 <script type="text/javascript">
 
-		// $(document).ready(function (){
+	 $(document).ready(function (){
 
-		// 	$('#registerForm').submit(function(e) {
-		// 	    e.preventDefault();
-		// 	    var name = $('#name').val();
-		// 	    var username = $('#username').val();
-		// 	    var email = $('#email').val();
-		// 	    var password = $('#password').val();
-			 
-		// 	    $(".error").remove();
-			 
-		// 	    if (name.length < 1) {
-		// 	      $('#name').after('<span class="error">This field is required</span>');
-		// 	    }
-		// 	    if (username.length < 1) {
-		// 	      $('#username').after('<span class="error">This field is required</span>');
-		// 	    }
-		// 	    if (email.length < 1) {
-		// 	      $('#email').after('<span class="error">This field is required</span>');
-		// 	    } else {
-		// 	      var regEx = /^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/;
-		// 	      var validEmail = regEx.test(email);
-		// 	      if (!validEmail) {
-		// 	        $('#email').after('<span class="error">Enter a valid email</span>');
-		// 	      }
-		// 	    }
-		// 	    if (password.length < 4 || password.length > 8) {
-		// 	      $('#password').after('<span class="error">Password must be between 4 to 8</span>');
-		// 	    }
-		// 	});
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-			// $('#name').blur(function(){
-			// 	var name = $(this).val();
-			// 	if(name == ''){
-			// 		$('#namestatus').text("Name field must not empty!");
-			// 		$('#namestatus').css("color","red");
-			// 	}else{
-			// 		$('#namestatus').text("");
-			// 	}			
-			// });
-
-			// $('#username').blur(function(){
-			// 	var username = $(this).val();
-			// 	if(username == ''){
-			// 		$('#usernamestatus').text("Username field must not empty!");
-			// 		$('#usernamestatus').css("color","red");
-			// 	}else{
-			// 		$('#usernamestatus').text("");
-			// 	}		
-			// });
-
-			// $('#email').blur(function(){
-			// 	var email = $(this).val();
-			// 	if(email == ''){
-			// 		$('#emailstatus').text("Email field must not empty!");
-			// 		$('#emailstatus').css("color","red");
-			// 	}else{
-			// 		$('#email').blur(function(){
-			// 			var email = $(this).val();
-			// 			var url   = "{{url('checkmail')}}";
-			// 			var token = "{!!csrf_token()!!}"; 
-			// 			$.ajax({
-			// 				url:url, 
-			// 	            method:"POST",
-			// 	            data:{'email':email,'_token':token},
-			// 	            dataType:"json",
-			// 	            cache: false,
-			// 	            success:function(data)
-			// 	            {
-			// 	            	// console.log(data.success);
-			// 	            	// alert(data);
-			// 		             if(data.success == true){
-			// 		             	// console.log('ok');
-			// 		             	$('#emailstatus').text("Email Available!");
-			// 		             	$('#emailstatus').css("color","green");
-			// 		             }else{
-			// 		             	// alert('else');
-			// 		             	$('#emailstatus').text("Email Already Exist!");
-			// 		             	$('#emailstatus').css("color","red");
-			// 		             }
-			// 				}
-			// 			});
-			// 		});
-			// 	}			
-			// });
-
-			// $('#password').blur(function(){
-			// 	var password = $(this).val();
-			// 	if(password == ''){
-			// 		$('#passwordstatus').text("Passwor field must not empty!");
-			// 		$('#passwordstatus').css("color","red");
-			// 	}else{
-			// 		$('#passwordstatus').text("");
-			// 	}			
-			// });
-
-
+		$("#registerForm").validate({
+			rules: {
+				name: {
+					required: true,
+					minlength: 3
+				},
+				username: {
+					required: true,
+					minlength: 2
+				},
+				password: {
+					required: true,
+					minlength: 4
+				},
+				confirm_password: {
+					required: true,
+					minlength: 5,
+					equalTo: "#password"
+				},
+				email: {
+					required: true,
+					email: true
+				},
+			},
+			messages: {
+				username: {
+					required: "Please enter a name",
+					minlength: "Your username must consist of at least 3 characters"
+				},
+				username: {
+					required: "Please enter a username",
+					minlength: "Your username must consist of at least 2 characters"
+				},
+				password: {
+					required: "Please provide a password",
+					minlength: "Your password must be at least 4 characters long"
+				},
+				confirm_password: {
+					required: "Please provide a password",
+					minlength: "Your password must be at least 5 characters long",
+					equalTo: "Please enter the same password as above"
+				},
+				email: "Please enter a valid email address"
+			}
 		});
 
 
-		
+		$('#email').blur(function(){
+			var email = $(this).val();
+			var checkerror = $('#email-error').html();
+			// console.log(checkerror);
+			if((email != '' && checkerror == '') || (email != '' && checkerror == null)){
+					var url   = "{{url('checkmail')}}";
+					var token = "{!!csrf_token()!!}"; 
+					$.ajax({
+						url:url, 
+			            method:"POST",
+			            data:{'email':email,'_token':token},
+			            dataType:"json",
+			            cache: false,
+			            success:function(data)
+			            {
+			            	// console.log(data.success);
+			            	// alert(data);
+				             if(data.success == true){
+				             	// console.log('ok');
+				             	$('#emailstatus').text("Email Available!");
+				             	$('#emailstatus').css("color","green");
+				             	$('#emailstatus').css("font-size","14px");
+				             	$('#emailstatus').css("font-family","serif");
+				             	$('#register').unbind('click');
+				             }else{
+				             	// alert('else');
+				             	$('#emailstatus').text("Email already been taken!");
+				             	$('#emailstatus').css("color","red");
+				             	$('#emailstatus').css("font-size","14px");
+				             	$('#emailstatus').css("font-family","serif");
+				             	$("#register").on('click', function (e) {
+								   e.preventDefault();
+								});
 
+				             }
+						}
+					});
+			}else{
+				$('#emailstatus').text("");
+			}			
+		});
 
+		$('#email').keyup(function(){
+			var email = $(this).val();
+			var checkerror = $('#email-error').html();
+			if(email == '' || checkerror != null){
+				$('#emailstatus').text("");
+			}
+		});
 
-		// $('.delete_user').on('click',function(arguments) {
-  //       var user_id    = $(this).attr('user-id');
-  //       var section_id = $(this).attr('section-id');
-  //       var url        = "{{url('workflow/section/notified-user-delete')}}"; 
-  //       var token = "{!!csrf_token()!!}";
-  //        $.ajax({
-  //           url:url, 
-  //           method:"POST",
-  //           data:{'section_id':section_id,'user_id': user_id,'_token':token},
-  //           dataType:"json",
-  //           success:function(data){
-  //             if(data.status == 'success'){
-  //                $('#user_section_'+section_id+'_'+user_id).hide();
-  //             }
-  //         }
-  //      });
-  //    });
+	});
 
 </script>
 @include('layout.footer')

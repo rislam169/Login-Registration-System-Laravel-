@@ -5,6 +5,7 @@
 			</div>
 			<div class="card-body">
 				<div style="max-width: 600px; margin: 0 auto;">
+				<p id="logstatus"></p>
 					<form method="POST" action="{{ url('logs') }}">
 						<input type="hidden" name="_token" value="{{csrf_token()}}">
 						<div class="form-group">
@@ -15,9 +16,10 @@
 							<label for="password">Password</label>
 							<input type="password" name="password" id="password" class="form-control">
 						</div>
-						<button type="submit" name="login" class="btn btn-success">Log in</button>
+						<button id="login" type="submit" name="login" class="btn btn-success">Log in</button>
 					</form>
 				</div>
 			</div>
 		</div>
 @include('layout.footer')
+

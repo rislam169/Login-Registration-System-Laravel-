@@ -5,12 +5,18 @@
 	<link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
 	<script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 	<script type="text/javascript" src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="{{asset('js/jquery.validate.min.js')}}"></script>
 	<style type="text/css">
 		a{
 			color: black;
 		}
 		.bg-light {
 		    background-color: #F2F2F2!important;
+		}
+		#name-error, #username-error, #email-error, #password-error, #confirm_password-error{
+			color:red;
+			font-size: 14px;
+			font-family: serif;	
 		}
 	</style>
 </head>
