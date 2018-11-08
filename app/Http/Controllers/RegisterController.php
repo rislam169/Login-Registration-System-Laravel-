@@ -20,21 +20,15 @@ class RegisterController extends Controller
 		]);
 
     	$student = new Student;
-
         $student->name 		= $request->name;
         $student->username  = $request->username;   
         $student->email     = $request->email;   
         $student->password  = $request->password;   
-       
         $student->save();
 
-
-
-
         $student_info = new StudentInfo;
-        $student_info->std_id       = $student->id;
+        $student_info->student_id       = $student->id;
         $student_info->save();
-
 
         return redirect('login')->with('success-message', 'Congratulation!! You are registered!');
     }

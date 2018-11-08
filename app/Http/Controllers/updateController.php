@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\EducationInfo;
 use App\Student;
 use App\StudentInfo;
 use Illuminate\Http\Request;
@@ -22,15 +23,17 @@ class updateController extends Controller
 			'username' => $request->username,
 			'email' => $request->email,
 		]);
-
-		StudentInfo::where('std_id', $id)->update([
+		StudentInfo::where('student_id', $id)->update([
 			'father_name' => $request->fname,
 			'mother_name' => $request->mname,
 			'address' => $request->address,
 			'mobile' => $request->mobile,
 		]);
-
-		return redirect('index')->with('success-message', 'Congratulation!! Data updated!');
+		if(Session::get('adminlogin') == true){
+			return redirect('index')->with('success-message', 'Congratulation!! Data updated!');
+		}else{
+			return redirect('profile/'.Session::get('id'))->with('success-message', 'Congratulation!! Data updated!');
+		}
 
    }
 
@@ -62,5 +65,20 @@ class updateController extends Controller
    {
    		Student::where('id', $id)->delete();
    		return redirect('index')->with('success-message', 'Data deleted Successfully');
+   }
+
+   public function saveeducation(Request $request)
+   {
+        $educationInfo = new EducationInfo;
+        $educationInfo->student_id    = $request->student_id;
+        $educationInfo->degree  = $request->degree;   
+        $educationInfo->degree_name     = $request->degreename;   
+        $educationInfo->institute  = $request->institute;   
+        $educationInfo->board  = $request->board;   
+        $educationInfo->passing_year  = $request->passyear;   
+        $educationInfo->duration  = $request->duration;   
+        $educationInfo->gpa  = $request->gpa;   
+        $educationInfo->save();
+        return response()->json(['success'=>true]);
    }
 }

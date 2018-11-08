@@ -20,4 +20,23 @@ class checkController extends Controller
   
    }
 
+   public function checkmailforupdate(Request $request)
+   {
+		$email = $request->email;
+		$id = $request->id;
+
+		// $checkmail = Student::where(['email' => $email])->first();
+		// $checkmail = Student::where(['id' '!=' $id])->first();
+
+		$checkmail = Student::where('email', '=', $email)
+			    ->where('id', '!=', $id)->first();
+
+		if ($checkmail) {
+   			return response()->json(['success'=>false]);
+   		}else{
+   			return response()->json(['success'=>true]);
+   		}
+
+   }
+
 }

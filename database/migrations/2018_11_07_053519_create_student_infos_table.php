@@ -15,11 +15,15 @@ class CreateStudentInfosTable extends Migration
     {
         Schema::create('student_infos', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('std_id');
-            $table->string('father_name');
-            $table->string('mother_name');
-            $table->string('address');
-            $table->string('mobile');
+
+            $table->integer('student_id')->unsigned()->index();
+
+            $table->foreign('student_id')->references('id')->on('students')->onUpdate('cascade')->onDelete('cascade');
+
+            $table->string('father_name')->nullable();
+            $table->string('mother_name')->nullable();
+            $table->text('address')->nullable();
+            $table->string('mobile')->nullable();
         });
     }
 

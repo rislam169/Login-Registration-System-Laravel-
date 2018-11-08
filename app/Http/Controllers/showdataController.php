@@ -12,15 +12,16 @@ class showdataController extends Controller
 {
     public function index()
     {	
-        if (Session::get('login')==true || Session::get('adminlogin')==true) {
+        if (Session::get('adminlogin')==true) {
             //$data = Student::where('id', '!=' , Session::get('id'))->get();
             //$data = DB::table('students')->get();
             // return $data;
             //$data = Student::all();
             $data = Student::paginate(3);
            return view('index', ['data' => $data]);
-        }
-        else{
+        }elseif(Session::get('login')==true){
+            return redirect('profile/'.Session::get('id'));
+        }else{
              return redirect('login');
         }
 		
@@ -30,7 +31,7 @@ class showdataController extends Controller
     {
         if (Session::get('login')==true || Session::get('adminlogin')==true) {
             $data = Student::find($id);
-             return view('profile',compact('data'));
+                return view('profile',compact('data'));
         }
         else{
              return redirect('login');

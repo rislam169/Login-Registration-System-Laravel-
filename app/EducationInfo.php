@@ -4,14 +4,14 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class StudentInfo extends Model
+class EducationInfo extends Model
 {
-    protected $table = "student_infos";
+    protected $table = "education_infos";
     public $timestamps = false;
+
 
      public function students()
     {
         return $this->belongsTo('App\Student');
     }
-
 }

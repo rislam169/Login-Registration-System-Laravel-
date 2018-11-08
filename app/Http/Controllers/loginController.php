@@ -21,7 +21,7 @@ class loginController extends Controller
     		Session::put('id',$data->id);
     		Session::put('username',$data->username);
 
-    		 return redirect('index');
+    		 return redirect('profile/'.$data->id);
     	}else{
     		 return redirect('login')->with('danger-message', 'Email or Password mismatch');
     	}

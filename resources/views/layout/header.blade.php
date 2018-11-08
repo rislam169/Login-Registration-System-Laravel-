@@ -28,8 +28,7 @@
 					<a class="navbar-brand" href="{{ url('index') }}">Login Register System</a>
 				</div>
 				<ul class="nav justify-content-center pull-right">
-					@if(Session::get('login') == true)	
-						<li class="nav-item btn btn-light btn-sm"><a class="nav-link" href="{{ url('index') }}">Home</a></li>
+					@if(Session::get('login') == true)
 						<li class="nav-item btn btn-light btn-sm"><a class="nav-link" href="{{ url('profile/'.Session::get('id')) }}">Profile</a></li>
 						<li class="nav-item btn btn-light btn-sm"><a class="nav-link" href="{{ url('logout') }}">Logout</a></li>
 					@endif
