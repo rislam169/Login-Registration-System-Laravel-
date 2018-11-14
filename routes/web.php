@@ -36,6 +36,7 @@ Route::post('adminlogs', 'loginController@adminlogs');
 Route::post('update', 'updateController@update');
 Route::post('updatepass', 'updateController@updatepass');
 Route::get('delprofile/{id}','updateController@delprofile');
+Route::post('deleducation','updateController@deleducation');
 Route::post('saveeducation','updateController@saveeducation');
 Route::post('checkmail','checkController@checkmail');
 Route::post('checkmailforupdate','checkController@checkmailforupdate');

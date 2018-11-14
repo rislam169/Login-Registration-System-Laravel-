@@ -19,8 +19,20 @@
 				<div class="tab-content" id="myTabContent">
 					<!-- Personal information content -->
 				  <div class="tab-pane fade show active" id="personal" role="tabpanel" aria-labelledby="home-tab">
-				  	<div style="max-width: 600px; margin: 0 auto;">
-						<form method="POST" action="{{ url('update') }}">
+				  	<form method="POST" action="{{ url('update') }}">
+					  	<div style="width: 35%;height: 600px; float: left;margin-top: 30px;">
+					  		<h4>Profile Image</h4>
+					  		<div class="text-center" style="margin-top:30px;margin-bottom: 50px;">
+					  			<img src="{{ asset('uploads\default.jpg') }}" class="rounded-circle img-fluid" height="300" width="300">
+					  		</div>
+					  		<div class="form-group">
+								<label for="image">Update Image</label>
+								<input type="file" name="image" id="image">
+							</div>
+					  		
+					  	</div>
+				  		<div style="width: 60%; float: right;margin-top: 30px;padding-left: 30px">
+				  			<h4>Profile Info</h4>
 							<input type="hidden" name="_token" value="{{csrf_token()}}">
 							<input type="hidden" name="id" id="id" class="form-control" value="{{$data->id}}">
 							<div class="form-group">
@@ -56,40 +68,45 @@
 								<button type="submit" name="update" class="btn btn-success">Update</button>
 								<a class="btn btn-info" href="{{ url('changepass') }}">Change Password</a>
 							@endif
-						</form>
-					</div>
+						
+						</div>
+					</form>
 				  </div>
 				  <!-- Personal information content end -->
 				  <!-- Educational Information content -->
 				  <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
 				  	<div style="max-width: 1000px; margin: 0 auto;">
-						<table class="table table-striped">
-							<tr>
-								<th>Degree</th>
-								<th>Degree Name</th>
-								<th>Institute</th>
-								<th>University/Board</th>
-								<th>Passing Year</th>
-								<th>Duration</th>
-								<th>Marks/CGPA</th>
-								<th>Action</th>
-							</tr>
-
-							@foreach($data->education as $key => $value)
-								<tr>    
-									<td>{{$value->degree}}</td>
-									<td>{{$value->degree_name}}</td>
-									<td>{{$value->institute}}</td>
-									<td>{{$value->board}}</td>
-									<td>{{$value->passing_year}}</td>
-									<td>{{$value->duration}}</td>
-									<td>{{$value->gpa}}</td>
-									<td>
-										
-										<a onclick="return confirm('Are you sure to delete?')" class="btn btn-warning" href="">Remove</a>
-									</td>                 
+						<table id="educationTable" class="table table-striped">
+							<thead>
+								<tr>
+									<th>Degree</th>
+									<th>Degree Name</th>
+									<th>Institute</th>
+									<th>University/Board</th>
+									<th>Passing Year</th>
+									<th>Duration</th>
+									<th>Marks/CGPA</th>
+									<th>Action</th>
 								</tr>
-							@endforeach
+							</thead>
+							<tbody>
+								@foreach($data->education as $key => $value)
+									<tr id="rowid{{$value->id}}">    
+										<td>{{$value->degree}}</td>
+										<td>{{$value->degree_name}}</td>
+										<td>{{$value->institute}}</td>
+										<td>{{$value->board}}</td>
+										<td>{{$value->passing_year}}</td>
+										<td>{{$value->duration}}</td>
+										<td>{{$value->gpa}}</td>
+										<td>
+											
+											<button data-id="{{$value->id}}" class="btn btn-warning deleducation">Remove</button>
+											<!-- onclick="return confirm('Are you sure to delete?')" -->
+										</td>                 
+									</tr>
+								@endforeach
+							</tbody>
 						</table>	
 					</div>
 					<div class="text-center">
@@ -134,7 +151,7 @@
 											<div class="col-md-6 ml-auto">
 												<div class="form-group">
 													<label for="passyear">Passing Year</label>
-													<input type="text" name="passyear" id="passyear" class="form-control">
+													<input type="number" min="1950" max="{{date('Y')}}" name="passyear" id="passyear" class="form-control">
 												</div>
 												<div class="form-group">
 													<label for="duration">Duration</label>
@@ -157,12 +174,32 @@
 						</div>
 					</div>
 					<!-- Add education modal -->
+					<!-- Delete education confirm modal -->
+				<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" id="del-modal">
+				  <div class="modal-dialog modal-sm">
+				    <div class="modal-content">
+				      <div class="modal-header">
+				        
+				        <h4 class="modal-title" id="myModalLabel">Are you confirm?</h4>
+				        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				      </div>
+				      <div class="modal-footer">
+				        <button type="button" class="btn btn-default" id="modal-btn-no">No</button>
+				        <button type="button" class="btn btn-primary" id="modal-btn-yes">Yes</button>
+				      </div>
+				    </div>
+				  </div>
+				</div>
+					<!-- Delete education confirm modal end -->
 				  <!-- Educational Information content end -->
 				</div>
 				<!-- Tab Content end -->	
 			</div>
 		</div>
+
+
 <script type="text/javascript">
+
 	// Email validation on profile update
 	$(document).ready(function (){
 		$('#email').blur(function(){
@@ -207,6 +244,8 @@
 				$('#emailstatus').text("");
 			}			
 		});
+
+
 		// Educational Information update
 		$('#submit').on('click', function () {
 			var student_id = $('#id').val();
@@ -226,14 +265,67 @@
 	            dataType:"json",
 	            success:function(data){
 	              if(data.success == true){
+	              	//console.log(data);
 	              	$('#exampleModal').modal('hide');
+
+	              	$("#educationTable > tbody").prepend('<tr><td>'+degree+'</td><td>'+degreename+'</td><td>'+institute+'</td><td>'+board+'</td><td>'+passyear+'</td><td>'+duration+'</td><td>'+gpa+'</td><td><button class="btn btn-warning">Remove</button></td></tr>');
 	              }else{
-	              	alert('failed');
+	              	alert('This educational infomation already added. Try New!');
 	              }
 
 	          	}		
 	       	});
 	    });
+
+	    // Delete Education Information
+	    var delId;
+		$(".deleducation").on("click", function(){
+			delId =  $(this).data('id');
+		});
+
+
+	    var modalConfirm = function(callback){
+  
+		  $(".deleducation").on("click", function(){
+		    $("#del-modal").modal('show');
+		  });
+
+		  $("#modal-btn-yes").on("click", function(){
+		    callback(true);
+		    $("#del-modal").modal('hide');
+		  });
+		  
+		  $("#modal-btn-no").on("click", function(){
+		    callback(false);
+		    $("#del-modal").modal('hide');
+		  });
+		};
+
+		modalConfirm(function(confirm){
+		  if(confirm){
+		  	// Delete after confirmation.
+		  	//console.log(delId);
+
+		  	var id = $(this).data('id');
+		    	var url   = "{{ url('deleducation') }}";
+		    	var token = "{!!csrf_token()!!}";
+		    	$.ajax({
+		            url:url, 
+		            method:"POST",
+		            data:{'id':delId, '_token':token},
+		            dataType:"json",
+		            success:function(data){
+		              if(data.success == true){
+		            	$('#rowid'+delId).remove();
+		              }else{
+		              	alert('Not deleted');
+		              }
+		          	}		
+		       	});
+		  }
+		});
+
+
     });
 
 

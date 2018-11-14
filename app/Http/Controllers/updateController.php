@@ -48,7 +48,7 @@ class updateController extends Controller
 		$newpass = $request->newpass;
 
    		$data = Student::where(['id' => $id] )->first();
-   		print_r($data);
+   		//print_r($data);
 
    		if ($oldpass == $data->password) {
    			Student::where('id', $id)->update([
@@ -69,16 +69,35 @@ class updateController extends Controller
 
    public function saveeducation(Request $request)
    {
-        $educationInfo = new EducationInfo;
-        $educationInfo->student_id    = $request->student_id;
-        $educationInfo->degree  = $request->degree;   
-        $educationInfo->degree_name     = $request->degreename;   
-        $educationInfo->institute  = $request->institute;   
-        $educationInfo->board  = $request->board;   
-        $educationInfo->passing_year  = $request->passyear;   
-        $educationInfo->duration  = $request->duration;   
-        $educationInfo->gpa  = $request->gpa;   
-        $educationInfo->save();
+        $data = EducationInfo::where(['degree' => $request->degree, 'student_id' => $request->student_id] )->first();
+        if ($data == NULL) {
+          $educationInfo = new EducationInfo;
+          $educationInfo->student_id    = $request->student_id;
+          $educationInfo->degree  = $request->degree;   
+          $educationInfo->degree_name     = $request->degreename;   
+          $educationInfo->institute  = $request->institute;   
+          $educationInfo->board  = $request->board;   
+          $educationInfo->passing_year  = $request->passyear;   
+          $educationInfo->duration  = $request->duration;   
+          $educationInfo->gpa  = $request->gpa;   
+          $educationInfo->save();
+          return response()->json(['success'=>true]);
+        }else{
+          return response()->json(['success'=>false]);
+        }
+
+       
+   }
+
+   public function deleducation(Request $request)
+   {
+      $id = $request->id;
+      if($id){
+         EducationInfo::where('id', $id)->delete();
         return response()->json(['success'=>true]);
+      }else{
+        return response()->json(['success'=>false ]);
+      }
+     
    }
 }

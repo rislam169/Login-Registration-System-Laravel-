@@ -16,6 +16,6 @@ class Student extends Model
 
      public function education()
     {
-        return $this->hasMany('App\EducationInfo', 'student_id');
+        return $this->hasMany('App\EducationInfo', 'student_id')->orderBy('id','desc');
     }
 }

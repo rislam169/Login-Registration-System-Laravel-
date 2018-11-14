@@ -20,6 +20,7 @@ class CreateStudentInfosTable extends Migration
 
             $table->foreign('student_id')->references('id')->on('students')->onUpdate('cascade')->onDelete('cascade');
 
+            $table->string('avatar')->default('default.jpg');
             $table->string('father_name')->nullable();
             $table->string('mother_name')->nullable();
             $table->text('address')->nullable();
