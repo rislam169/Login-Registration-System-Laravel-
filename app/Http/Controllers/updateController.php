@@ -7,12 +7,24 @@ use App\Student;
 use App\StudentInfo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
+use Intervention\Image\Facades\Image;
 
 class updateController extends Controller
 {
    public function update(Request $request)
    {
-   		$id = $request->id;
+      $id = $request->id;
+
+      if($request->hasFile('image')){
+        $avatar = $request->file('image');
+        $filename = $request->username.'-'.$request->id.'.'.$avatar->getClientOriginalExtension();
+        Image::make($avatar)->resize(300, 300)->save(public_path('\uploads\avatars\\'.$filename));
+        
+        StudentInfo::where('student_id', $id)->update([
+         'avatar' => $filename,
+        ]);
+
+      }
    		$request->validate([
     		'name' => 'required',
     		'username' => 'required',
@@ -29,13 +41,14 @@ class updateController extends Controller
 			'address' => $request->address,
 			'mobile' => $request->mobile,
 		]);
+
 		if(Session::get('adminlogin') == true){
 			return redirect('index')->with('success-message', 'Congratulation!! Data updated!');
 		}else{
 			return redirect('profile/'.Session::get('id'))->with('success-message', 'Congratulation!! Data updated!');
 		}
 
-   }
+}
 
    public function updatepass(Request $request)
    {
@@ -69,22 +82,28 @@ class updateController extends Controller
 
    public function saveeducation(Request $request)
    {
-        $data = EducationInfo::where(['degree' => $request->degree, 'student_id' => $request->student_id] )->first();
-        if ($data == NULL) {
-          $educationInfo = new EducationInfo;
-          $educationInfo->student_id    = $request->student_id;
-          $educationInfo->degree  = $request->degree;   
-          $educationInfo->degree_name     = $request->degreename;   
-          $educationInfo->institute  = $request->institute;   
-          $educationInfo->board  = $request->board;   
-          $educationInfo->passing_year  = $request->passyear;   
-          $educationInfo->duration  = $request->duration;   
-          $educationInfo->gpa  = $request->gpa;   
-          $educationInfo->save();
-          return response()->json(['success'=>true]);
-        }else{
-          return response()->json(['success'=>false]);
-        }
+      $request->validate([
+        'degree' => 'required',
+        'institute' => 'required',
+        'passyear' => 'required',
+        'gpa' => 'required',
+      ]);
+      $data = EducationInfo::where(['degree' => $request->degree, 'student_id' => $request->student_id] )->first();
+      if ($data == NULL) {
+        $educationInfo = new EducationInfo;
+        $educationInfo->student_id    = $request->student_id;
+        $educationInfo->degree  = $request->degree;   
+        $educationInfo->degree_name     = $request->degreename;   
+        $educationInfo->institute  = $request->institute;   
+        $educationInfo->board  = $request->board;   
+        $educationInfo->passing_year  = $request->passyear;   
+        $educationInfo->duration  = $request->duration;   
+        $educationInfo->gpa  = $request->gpa;   
+        $educationInfo->save();
+        return response()->json(['success'=>true]);
+      }else{
+        return response()->json(['success'=>false]);
+      }
 
        
    }

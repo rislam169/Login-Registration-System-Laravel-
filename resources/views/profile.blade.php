@@ -1,5 +1,11 @@
 @include('layout.header')
-
+<style type="text/css">
+	.error-label {
+	    color: red;
+	    font-size: 15px;
+	    font-family: serif;
+	}
+</style>
 <div class="card" style="margin-bottom: 30px;">
 			<div class="card-header">
 				<h2>User Profile <span class="float-right"><a href="{{ url('index') }}" class="btn btn-primary">Back</a></span></h2>
@@ -19,15 +25,16 @@
 				<div class="tab-content" id="myTabContent">
 					<!-- Personal information content -->
 				  <div class="tab-pane fade show active" id="personal" role="tabpanel" aria-labelledby="home-tab">
-				  	<form method="POST" action="{{ url('update') }}">
+				  	<form enctype="multipart/form-data" method="POST" action="{{ url('update') }}">
 					  	<div style="width: 35%;height: 600px; float: left;margin-top: 30px;">
 					  		<h4>Profile Image</h4>
 					  		<div class="text-center" style="margin-top:30px;margin-bottom: 50px;">
-					  			<img src="{{ asset('uploads\default.jpg') }}" class="rounded-circle img-fluid" height="300" width="300">
+					  			<img src="{{asset('uploads/avatars/'.$data->details->avatar)}}" class="rounded-circle img-fluid" height="300" width="300">
+					  			
 					  		</div>
 					  		<div class="form-group">
 								<label for="image">Update Image</label>
-								<input type="file" name="image" id="image">
+								<input type="file" name="image" id="image" class="form-control" style="padding-bottom: 35px;">
 							</div>
 					  		
 					  	</div>
@@ -129,37 +136,38 @@
 											<div class="col-md-6">
 												<input type="hidden" name="id" id="id" class="form-control" value="{{$data->id}}">
 												<input type="hidden" name="_token" value="{{csrf_token()}}">
+												<small>Required Field*</small>
 												<div class="form-group">
-													<label for="degree">Degree</label>
-													<input type="text" name="degree" id="degree" class="form-control">
+													<label for="degree">Degree*</label>
+													<input type="text" name="degree" id="degree" class="form-control" placeholder="e.g. SSC">
 												</div>
 												<div class="form-group">
 													<label for="degreename">Degree Name</label>
-													<input type="text" name="degreename" id="degreename" class="form-control">
+													<input type="text" name="degreename" id="degreename" class="form-control" placeholder="e.g. Secondary School Certificate">
 												</div>
 												<div class="form-group">
-													<label for="institute">Institute</label>
+													<label for="institute">Institute*</label>
 													<input type="text" name="institute" id="institute" class="form-control">
 													<p id="emailstatus"></p>
 												</div>
 												<div class="form-group">
 													<label for="board">University/Board</label>
-													<input type="text" name="board" id="board" class="form-control">
+													<input type="text" name="board" id="board" class="form-control" placeholder="e.g. Dhaka">
 													<p id="emailstatus"></p>
 												</div>
 											</div>
 											<div class="col-md-6 ml-auto">
 												<div class="form-group">
-													<label for="passyear">Passing Year</label>
-													<input type="number" min="1950" max="{{date('Y')}}" name="passyear" id="passyear" class="form-control">
+													<label for="passyear">Passing Year*</label>
+													<input type="number" min="1950" max="{{date('Y')}}" name="passyear" id="passyear" class="form-control" placeholder="e.g. 2018">
 												</div>
 												<div class="form-group">
 													<label for="duration">Duration</label>
 													<input type="number" name="duration" id="duration" class="form-control">
 												</div>
 												<div class="form-group">
-													<label for="gpa">Marks/CGPA</label>
-													<input type="text" name="gpa" id="gpa" class="form-control">
+													<label for="gpa">Marks/CGPA*</label>
+													<input type="text" name="gpa" id="gpa" class="form-control" placeholder="e.g. 4.50">
 													<p id="emailstatus"></p>
 												</div>
 											</div>
@@ -167,7 +175,7 @@
 									</div>
 									<div class="modal-footer">
 										<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-										<button type="button" name="submit" class="btn btn-primary" id="submit">Save Education</button>
+										<button type="button" name="submit" class="btn btn-primary" id="edusubmit">Save Education</button>
 									</div>
 								</form>
 							</div>
@@ -245,37 +253,84 @@
 			}			
 		});
 
+		// Education form validate
+		
+		   
+	
 
-		// Educational Information update
-		$('#submit').on('click', function () {
-			var student_id = $('#id').val();
-	        var degree = $('#degree').val();
-	        var degreename = $('#degreename').val();
-	        var institute = $('#institute').val();
-	        var board = $('#board').val();
-	        var passyear = $('#passyear').val();
-	        var duration = $('#duration').val();
-	        var gpa = $('#gpa').val();
-	        var url   = "{{url('saveeducation')}}";
-	        var token = "{!!csrf_token()!!}";
-	         $.ajax({
-	            url:url, 
-	            method:"POST",
-	            data:{'student_id':student_id,'degree':degree,'degreename': degreename,'institute': institute,'board': board,'passyear': passyear,'duration': duration,'gpa': gpa,'_token':token},
-	            dataType:"json",
-	            success:function(data){
-	              if(data.success == true){
-	              	//console.log(data);
-	              	$('#exampleModal').modal('hide');
+		$("#educationForm").validate({
+			debug: false,
+		    errorClass: "error-label",
+		    errorElement: "span",
+			rules: {
+				degree: {
+					required: true
+				},
+				institute: {
+					required: true
+				},
+				passyear: {
+					required: true
+				},
+				gpa: {
+					required: true
+				},
+			},
+			messages: {
+				degree: {
+					required: "Please enter your degree"
+				},
+				institute: {
+					required: "Please enter institute name"
+				},
+				passyear: {
+					required: "Please provide passing year"
+				},
+				gpa: {
+					required: "Please provide your result"
+				},
+			}
+		});
 
-	              	$("#educationTable > tbody").prepend('<tr><td>'+degree+'</td><td>'+degreename+'</td><td>'+institute+'</td><td>'+board+'</td><td>'+passyear+'</td><td>'+duration+'</td><td>'+gpa+'</td><td><button class="btn btn-warning">Remove</button></td></tr>');
-	              }else{
-	              	alert('This educational infomation already added. Try New!');
-	              }
+		// Educationational Information update
+		 $('#edusubmit').on('click', function () {
+			$("#educationForm").validate();
+		      if ($("#educationForm").valid()) 
+		      { 
+				var student_id = $('#id').val();
+		        var degree = $('#degree').val();
+		        var degreename = $('#degreename').val();
+		        var institute = $('#institute').val();
+		        var board = $('#board').val();
+		        var passyear = $('#passyear').val();
+		        var duration = $('#duration').val();
+		        var gpa = $('#gpa').val();
+		        var url   = "{{url('saveeducation')}}";
+		        var token = "{!!csrf_token()!!}";
+		         $.ajax({
+		            url:url, 
+		            method:"POST",
+		            data:{'student_id':student_id,'degree':degree,'degreename': degreename,'institute': institute,'board': board,'passyear': passyear,'duration': duration,'gpa': gpa,'_token':token},
+		            dataType:"json",
+		            success:function(data){
+		              if(data.success == true){
+		              	//console.log(data);
+		              	$('#exampleModal').modal('hide');
 
-	          	}		
-	       	});
-	    });
+		              	$("#educationTable > tbody").prepend('<tr><td>'+degree+'</td><td>'+degreename+'</td><td>'+institute+'</td><td>'+board+'</td><td>'+passyear+'</td><td>'+duration+'</td><td>'+gpa+'</td><td><button class="btn btn-warning">Remove</button></td></tr>');
+		              }else{
+		              	alert('This educational infomation already added. Try New!');
+		              }
+
+		          	}		
+		       	});
+		      } 
+		      else 
+		      { 
+		        
+		      }
+
+	     });
 
 	    // Delete Education Information
 	    var delId;

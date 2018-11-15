@@ -27,7 +27,7 @@ class RegisterController extends Controller
         $student->save();
 
         $student_info = new StudentInfo;
-        $student_info->student_id       = $student->id;
+        $student_info->student_id = $student->id;
         $student_info->save();
 
         return redirect('login')->with('success-message', 'Congratulation!! You are registered!');
